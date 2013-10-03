@@ -11,21 +11,19 @@ function convert_rems() {
 		return false;
 	}
 
+    // Get the base font size
+    var base_font_size = getFontSize();
+
 	for (var z = 0; z < document.styleSheets.length; z++) {
-        get_and_action_styles(document.styleSheets[z].href);
+        get_and_action_styles(document.styleSheets[z].href, base_font_size);
     }
 }
 
-function get_and_action_styles(href) {
+function get_and_action_styles(href, base_font_size) {
     $.get(href, function(styles) {
 
-        // Get the base font size
-        var base_font_size = getFontSize();
-
-        var lines, clean_array, clean_lines, line, prop, val, new_font_size, str_replace_all, int_index_of_match, new_length;
-
         // split the string into lines
-        lines = split_lines(styles);
+        var lines = split_lines(styles);
 
         // Make sure there are lines to test in the stylesheet
         if (lines.length === 0) {
@@ -36,40 +34,40 @@ function get_and_action_styles(href) {
         for (a = 0; a < lines.length; a++) {
 
             // split lines with multiple rules into separate lines.
-            clean_array = split_rules(lines[a]);
+            var split_two = lines[a].replace(';', ";\n");
 
             // Now that we have the split rules we again need to split them into lines
-            clean_lines = split_lines(clean_array);
+            var clean_lines = split_lines(split_two);
 
             // Now that we definitely have individual lines we can perform the search and replace
             for (x = 0; x < clean_lines.length; x++) {
 
-                line = clean_lines[x];
+                var line = clean_lines[x];
 
                 // Check to make sure that the string 'rem' appears after the colon to bypass things such as "counter-increment: inherit;"
                 if ((line.indexOf('rem') >= 0)  &&  (line.indexOf('rem') > line.indexOf(':'))) {
 
                     // get the property
-                    prop = line.split(':');
+                    var prop = line.split(':');
 
                     // make sure we have an index of 2
                     if (prop.length === 2) {
                         prop = prop[1];
                         prop = prop.replace(';', '');
 
-                        val = parseFloat(prop);
+                        var val = parseFloat(prop);
 
                         // Check to make sure we have a float
                         if (!isNaN(val)) {
                             // Now multiply the rem buy the font-size
-                            new_font_size = (val * parseFloat(base_font_size));
+                            var new_font_size = (val * parseFloat(base_font_size));
 
                             new_font_size = ' ' + new_font_size + 'px';
 
                             // replace the property stylesheet wide
 
-                            str_replace_all = styles;
-                            int_index_of_match = str_replace_all.indexOf( prop );
+                            var str_replace_all = styles;
+                            var int_index_of_match = str_replace_all.indexOf( prop );
 
                             // Loop over the string value replacing out each matching
                             // substring.
@@ -96,13 +94,9 @@ function get_and_action_styles(href) {
 
         // Write the stylesheet back to the file
         document.styleSheets[current_index].cssText=styles;
-        new_length = styles.length;
+        var new_length = styles.length;
 
     }); // End of jquery get for the stylesheet
-}
-
-function split_rules(lines) {
-    return lines.replace(';', ";\n");
 }
 
 function split_lines(lines) {
