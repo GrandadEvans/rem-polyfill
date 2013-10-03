@@ -1,15 +1,14 @@
 #REM Polyfill for IE8
 
 This polyfill does the following
-- Scans for stylesheets both via <link> and <style> tags
-- Gets the base font size
-- Replaces all instances of rem units to the px equivalent. (currently only px though)
+1. Scans for stylesheets both via <link> and <style> tags
+2. Gets the base font size
+3. Replaces all instances of rem units to the px equivalent. (currently only px though)
 
 I did try the rem-unit polyfill but I also needed media query support.
-So along with the media queries polyfill you can now have both
-- REM unit support
-- Media queru support
-in IE8
+So along with the media queries polyfill you can now have both in IE8
+* REM unit support
+* Media queru support
 
 ## Help
 Ok, here's the deal. I know that my Javascript coding techniques could do with improving.
