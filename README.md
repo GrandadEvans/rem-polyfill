@@ -1,3 +1,5 @@
+Please note that although this repo is only a year old, it is before I got into OOP and so there are nested conditionals galore. When I have time to redo the code I shall do but the code does work.
+
 # REM Polyfill for IE8
 
 This polyfill does the following
